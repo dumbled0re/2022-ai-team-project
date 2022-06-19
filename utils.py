@@ -68,7 +68,6 @@ class YOLOUtils:
 
         print("ファイル名の変換処理が終わりました。")
 
-    # NOTE: この関数はなくてもいい
     def add_blank(self):
         """
         ファイルの最後に空白を追加
