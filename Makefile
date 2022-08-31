@@ -25,7 +25,6 @@ lint:
 	@poetry run black spider/ --check
 	@poetry run flake8 spider/
 	@poetry run mypy spider/
-	@poetry run bandit --recursive spider/
 
 clean:
 	@rm -rf build dist .eggs *.egg-info
