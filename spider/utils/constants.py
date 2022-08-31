@@ -1,2 +1,2 @@
 # logファイル
-LOG_FILE_PATH = "log/rakuten_recipe_log.log"
+LOG_FILE_PATH = "logs/rakuten_recipe.log"

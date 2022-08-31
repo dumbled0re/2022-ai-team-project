@@ -7,11 +7,11 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.loader import ItemLoader
 from scrapy.spiders import CrawlSpider, Rule
 
-from spider.items import SpiderItem
+from spider.items import RakutenItem
 from spider.utils.constants import LOG_FILE_PATH
-from spider.utils.logger import getLogger
+from spider.utils.logger import get_logger
 
-logger = getLogger(__name__, LOG_FILE_PATH)
+logger = get_logger(__name__, LOG_FILE_PATH)
 
 
 class RakutenRecipeSpiderSpider(CrawlSpider):
@@ -22,7 +22,9 @@ class RakutenRecipeSpiderSpider(CrawlSpider):
 
     rules = (
         Rule(
-            LinkExtractor(restrict_xpaths="//li[@class='recipe_ranking__item']/a"),
+            LinkExtractor(
+                restrict_xpaths="//li[@class='recipe_ranking__item']/a"
+            ),
             callback="parse_recipe",
             follow=False,
         ),
@@ -33,7 +35,7 @@ class RakutenRecipeSpiderSpider(CrawlSpider):
         ),
     )
 
-    def parse_recipe(self, response: HtmlResponse) -> SpiderItem:
+    def parse_recipe(self, response: HtmlResponse) -> ItemLoader:
         """楽天レシピの詳細ページからレシピ情報を取得
 
         Args:
@@ -42,10 +44,12 @@ class RakutenRecipeSpiderSpider(CrawlSpider):
             item: DBに保存するアイテムオブジェクト
         """
 
-        logger.info(f"参照URL: {response.url}")
-        rakuten_recipe_item = ItemLoader(item=SpiderItem(), response=response)
+        # logger.info(f"参照URL: {response.url}")
+        rakuten_recipe_item = ItemLoader(item=RakutenItem(), response=response)
         ingredients = dict()
-        ingredients_elems = response.xpath('//li[@class="recipe_material__item"]')
+        ingredients_elems = response.xpath(
+            '//li[@class="recipe_material__item"]'
+        )
 
         try:
             serves = response.xpath(
@@ -92,7 +96,9 @@ class RakutenRecipeSpiderSpider(CrawlSpider):
         # logger.info(f"材料: {ingredients}")
 
         rakuten_recipe_item.add_value("crawled_url", response.url)
-        rakuten_recipe_item.add_xpath("title", '//h1[@class="page_title__text"]/text()')
+        rakuten_recipe_item.add_xpath(
+            "title", '//h1[@class="page_title__text"]/text()'
+        )
         rakuten_recipe_item.add_value("serves", mojimoji.zen_to_han(serves))
         rakuten_recipe_item.add_value(
             "ingredients", json.dumps(ingredients, ensure_ascii=False)

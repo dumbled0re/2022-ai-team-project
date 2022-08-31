@@ -1,8 +1,7 @@
-from typing import Dict, List
-
-from crawler_utils.db import BASE, DBAdapter
 from sqlalchemy import Column, func
 from sqlalchemy.sql.sqltypes import TEXT, TIMESTAMP, Integer
+
+from spider.utils.db_adapter import BASE, DBAdapter
 
 db_adapter = DBAdapter(  # nosec
     dotenv_path=".env",
@@ -15,8 +14,8 @@ db_adapter = DBAdapter(  # nosec
 
 
 class RakutenRecipe(BASE):
-    __tablename__ = "indeed"
-    id = Column(Integer, primary_key=True, comment="DBに付与されるID")
+    __tablename__ = "rakuten_recipe"
+    db_id = Column(Integer, primary_key=True, comment="DBに付与されるID")
     crawled_url = Column(TEXT, nullable=False, comment="参照URL")
     title = Column(TEXT, nullable=False, comment="タイトル")
     serves = Column(TEXT, comment="何人分")
@@ -30,31 +29,49 @@ class RakutenRecipe(BASE):
     )
     updated_at = Column(
         TIMESTAMP(timezone=True),
+        server_default=func.now(),
         onupdate=func.now(),
         comment="更新日時",
     )
 
     @staticmethod
-    def bulk_insert(rakuten_recipe_list: List[Dict]) -> None:
+    def select_all() -> list[dict[str, str]]:
         """
-        楽天レシピから収集したレシピをまとめて保存
+        レシピ情報をすべて取得
+        """
+        res = db_adapter.session.query(RakutenRecipe).all()
+        return [r.__dict__ for r in res]
+
+    @staticmethod
+    def bulk_insert(rakuten_recipe_list: list[dict[str, str]]) -> None:
+        """
+        レシピ情報をまとめて保存
         """
         rakuten_recipes = [RakutenRecipe(**dc) for dc in rakuten_recipe_list]
-        db_adapter.session.bulk_save_objects(rakuten_recipes, return_defaults=True)
+        db_adapter.session.bulk_save_objects(
+            rakuten_recipes, return_defaults=True
+        )
+        db_adapter.session.commit()
+
+    @staticmethod
+    def bulk_update(rakuten_recipe_list: list[dict[str, str]]) -> None:
+        """
+        レシピ情報をまとめて更新
+        """
+        db_adapter.session.bulk_update_mappings(
+            RakutenRecipe, rakuten_recipe_list
+        )
         db_adapter.session.commit()
 
 
-class DB_Driver:
+class Driver:
     @staticmethod
     def create_tables() -> None:
         """
         テーブルの作成
         """
-        db_adapter.make_tables(tables=[RakutenRecipe])
-
-    @staticmethod
-    def delete_tables() -> None:
-        """
-        テーブルの削除
-        """
-        db_adapter.delete_tables(tables=[RakutenRecipe])
+        db_adapter.make_tables(
+            tables=[
+                RakutenRecipe,
+            ]
+        )

@@ -1,5 +1,3 @@
-from typing import List
-
 import requests
 from bs4 import BeautifulSoup
 
@@ -10,7 +8,7 @@ class SpiderUtils:
     def __init__(self) -> None:
         pass
 
-    def get_start_urls(self) -> List[str]:
+    def get_start_urls(self) -> list[str]:
         """クローリングを開始するURLを取得する関数
 
         Returns:

@@ -3,7 +3,7 @@ from logging import INFO, Formatter, StreamHandler, handlers
 from pathlib import Path
 
 
-def getLogger(log_name: str, log_file_path: str) -> logging.Logger:
+def get_logger(log_name: str, log_file_path: str) -> logging.Logger:
 
     # ロガー生成
     logger = logging.getLogger(log_name)
@@ -17,6 +17,7 @@ def getLogger(log_name: str, log_file_path: str) -> logging.Logger:
     file_path.parent.mkdir(parents=True, exist_ok=True)
 
     handler = handlers.RotatingFileHandler(
+        # パスをPOSIX形式に変換する（ディレクトリの区切りをスラッシュ「/」とした表現にする）
         filename=file_path.as_posix(),
         encoding="UTF-8",
         maxBytes=1048576,

@@ -1,5 +1,8 @@
+.history/
+.vscode/
+trash/
+
 # Byte-compiled / optimized / DLL files
-.DS_Store
 __pycache__/
 *.py[cod]
 *$py.class
@@ -128,5 +131,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-test*
-*.DS_Store
+
+# Mac
+.DS_Store
+
+# PyCharm Editor
+.idea
+
+logs/*.log*
+test.py
