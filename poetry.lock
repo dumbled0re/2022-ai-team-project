@@ -21,6 +21,18 @@ docs = ["sphinx-notfound-page", "zope.interface", "sphinx", "furo"]
 dev = ["cloudpickle", "pre-commit", "sphinx-notfound-page", "sphinx", "furo", "zope.interface", "pytest-mypy-plugins", "mypy (>=0.900,!=0.940)", "pytest (>=4.3.0)", "pympler", "hypothesis", "coverage[toml] (>=5.0.2)"]
 
 [[package]]
+name = "autoflake"
+version = "1.5.2"
+description = "Removes unused imports and unused variables"
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+pyflakes = ">=1.1.0"
+toml = ">=0.10.2"
+
+[[package]]
 name = "automat"
 version = "20.2.0"
 description = "Self-service finite-state machines for the programmer on the go."
@@ -1058,13 +1070,17 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "9de8f0582abf3a4001f58b82fa855cd62ac40e05187aefda0ae5e339b66de349"
+content-hash = "c3ed547e45a3fa95c32f02ab76ebf94f01ea004a8c2c5987ad29a0802e99fbcc"
 
 [metadata.files]
 atomicwrites = []
 attrs = [
     {file = "attrs-22.1.0-py2.py3-none-any.whl", hash = "sha256:86efa402f67bf2df34f51a335487cf46b1ec130d02b8d39fd248abfd30da551c"},
     {file = "attrs-22.1.0.tar.gz", hash = "sha256:29adc2665447e5191d0e7c568fde78b21f9672d344281d0c6e1ab085429b22b6"},
+]
+autoflake = [
+    {file = "autoflake-1.5.2-py2.py3-none-any.whl", hash = "sha256:3a57716fdaa6c21273b901e62a8d1682b266a2ad43f7a64e5f16663c9cdfd73c"},
+    {file = "autoflake-1.5.2.tar.gz", hash = "sha256:79c27c11efba4c7f35ca9747cdc2da0f5862fb0e0813c168fd781c0c572b9b01"},
 ]
 automat = [
     {file = "Automat-20.2.0-py2.py3-none-any.whl", hash = "sha256:b6feb6455337df834f6c9962d6ccf771515b7d939bca142b29c20c2376bc6111"},
