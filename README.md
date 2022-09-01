@@ -39,7 +39,6 @@
 ├── yolov4-tiny.ipynb
 ├── yolov4.ipynb
 ├── .env.sample
-├── .env.sample
 ├── .flake8
 ├── .gitattibutes
 ├── .gitignore
